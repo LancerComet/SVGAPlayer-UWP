@@ -3,9 +3,9 @@
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:local="using:Svga"
-  xmlns:Control="using:Svga.Controls"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:controls="using:Svga.SvgaPlayer.Controls"
   mc:Ignorable="d"
   Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
 >
@@ -19,14 +19,8 @@
       <Button Content="Start" Click="OnStartClick"></Button>
     </StackPanel>
 
-    <ScrollViewer
-      Grid.Row="1"
-      HorizontalScrollBarVisibility="Auto"
-      VerticalScrollBarVisibility="Auto"
-      HorizontalScrollMode="Auto"
-      VerticalScrollMode="Auto"
-    >
-      <Control:SvgaPlayer x:Name="Player"></Control:SvgaPlayer>
-    </ScrollViewer>
+    <Viewbox Grid.Row="1">
+      <controls:SvgaPlayer x:Name="Player"></controls:SvgaPlayer>
+    </Viewbox>
   </Grid>
 </Page>

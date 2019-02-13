@@ -1,6 +1,6 @@
 ﻿using Com.Opensource.Svga;
 
-namespace Svga.Controls {
+namespace Svga.SvgaPlayer.Controls {
   public partial class SvgaPlayer {
     /// <summary>
     /// 绘制 Sprites.

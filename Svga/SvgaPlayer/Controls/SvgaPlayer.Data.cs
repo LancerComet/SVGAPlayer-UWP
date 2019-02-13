@@ -4,7 +4,7 @@ using Com.Opensource.Svga;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
 
-namespace Svga.Controls {
+namespace Svga.SvgaPlayer.Controls {
   public partial class SvgaPlayer {
     private byte[] InflatedBytes { get; set; }
     private MovieEntity MovieEntity { get; set; }

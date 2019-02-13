@@ -1,7 +1,7 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace Svga.Controls {
+namespace Svga.SvgaPlayer.Controls {
   public partial class SvgaPlayer : UserControl {
     /// <summary>
     /// Onload handler.
