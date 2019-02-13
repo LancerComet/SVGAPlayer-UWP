@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Numerics;
-using Windows.UI;
-using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.UI;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 using Svga.SvgaPlayer.Models;
@@ -11,7 +9,7 @@ namespace Svga.SvgaPlayer.Controls {
   public partial class SvgaPlayer {
     private bool IsStageInited { get; set; }
     private bool IsResourceReady { get; set; }
-    private bool inDraw { get; set; }
+    public bool IsInPlay { get; set; }
 
     /// <summary>
     /// CanvasControl 对象.
@@ -63,7 +61,7 @@ namespace Svga.SvgaPlayer.Controls {
     /// <param name="sender"></param>
     /// <param name="args"></param>
     private void StageOnDraw (ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args) {
-      if (!this.inDraw || !this.IsResourceReady) {
+      if (!this.IsInPlay || !this.IsResourceReady) {
         return;
       }
 
@@ -85,8 +83,6 @@ namespace Svga.SvgaPlayer.Controls {
             sprite.CurrentFrame++;
           }
         }
-
-        session.DrawText("LancerComet", new Vector2(0, 0), Colors.DeepSkyBlue);
       }
     }
 
@@ -116,7 +112,7 @@ namespace Svga.SvgaPlayer.Controls {
     /// 开始画布播放.
     /// </summary>
     public void Play () {
-      this.inDraw = true;
+      this.IsInPlay = true;
       this.Stage.Paused = false;
     }
 
@@ -124,7 +120,7 @@ namespace Svga.SvgaPlayer.Controls {
     /// 暂停画布播放.
     /// </summary>
     public void Pause () {
-      this.inDraw = false;
+      this.IsInPlay = false;
       this.Stage.Paused = true;
     }
   }

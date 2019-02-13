@@ -25,5 +25,14 @@ namespace Svga {
     private void OnStartClick (object sender, RoutedEventArgs e) {
       this.InitPlayer();
     }
+
+    private void OnPauseClick (object sender, RoutedEventArgs e) {
+      var player = this.Player;
+      if (player.IsInPlay) {
+        player.Pause();
+      } else {
+        player.Play();
+      }
+    }
   }
 }

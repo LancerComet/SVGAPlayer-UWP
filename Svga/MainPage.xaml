@@ -15,8 +15,9 @@
       <RowDefinition Height="*"></RowDefinition>
     </Grid.RowDefinitions>
 
-    <StackPanel>
+    <StackPanel Orientation="Horizontal">
       <Button Content="Start" Click="OnStartClick"></Button>
+      <Button Content="Toggle Pause" Click="OnPauseClick"></Button>
     </StackPanel>
 
     <Viewbox Grid.Row="1">
