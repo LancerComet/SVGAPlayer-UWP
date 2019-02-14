@@ -81,7 +81,11 @@ namespace Svga.SvgaPlayer.Controls {
       foreach (var sprite in sprites) {
         var imageKey = sprite.ImageKey;
         var image = this.Images.FirstOrDefault(item => item.Key == imageKey);
-        await this.StageResource.AddSprite(sprite, image.Value);
+
+        // 有可能导出的 SVGA Image 实际不存在 PNG Binary.
+        if (image.Value != null) {
+          await this.StageResource.AddSprite(sprite, image.Value);
+        }
       }
 
       this.IsResourceReady = true;

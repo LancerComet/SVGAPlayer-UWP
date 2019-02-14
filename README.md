@@ -55,3 +55,7 @@ class SvgaPlayer {
   public void UnloadStage () {}
 }
 ```
+
+## SVGA File Struct
+
+![img](https://raw.githubusercontent.com/LancerComet/SVGAPlayer-UWP/master/Svga/SVGA%20File%20Sturct.png)
