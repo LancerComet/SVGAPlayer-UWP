@@ -25,7 +25,7 @@ class SvgaPlayer {
   /// <summary>
   /// 当前是否处于播放状态.
   /// </summary>
-  public void IsInPlay { get; }
+  public bool IsInPlay { get; }
 
   /// <summary>
   /// 载入 SVGA 文件数据.
