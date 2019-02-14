@@ -47,7 +47,7 @@ namespace Svga.SvgaPlayer.Models {
     /// <summary>
     /// 当前绘制帧下标.
     /// </summary>
-    private int _currentFrame = 0;
+    private int _currentFrame;
     public int CurrentFrame {
       get => this._currentFrame;
       set {

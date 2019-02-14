@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -10,23 +11,29 @@ namespace Svga {
       this.InitializeComponent();
     }
 
-    private async void InitPlayer () {
-      var uri = new Uri("ms-appx:///Assets/Svga/p1.svga");
-      var svgaFile = await StorageFile.GetFileFromApplicationUriAsync(uri);
+    private async void SelectFileAndInitPlayer () {
+      var picker = new FileOpenPicker();
+      picker.ViewMode = PickerViewMode.List;
+      picker.SuggestedStartLocation = PickerLocationId.Desktop;
+      picker.FileTypeFilter.Add(".svga");
 
-      using (Stream stream = await svgaFile.OpenStreamForReadAsync()) {
-        var player = this.Player;
-        player.LoadSvgaFileData(stream);
-        player.InitStage();
-        player.Play();
+      var file = await picker.PickSingleFileAsync();
+      if (file != null) {
+        using (var stream = await file.OpenAsync(FileAccessMode.Read, StorageOpenOptions.AllowOnlyReaders)) {
+          var player = this.Player;
+//          player.LoopCount = 1;
+          player.LoadSvgaFileData(stream.AsStream());
+          player.InitStage();
+          player.Play();
+        }
       }
     }
 
-    private void OnStartClick (object sender, RoutedEventArgs e) {
-      this.InitPlayer();
+    private void OnSelectFileClick (object sender, RoutedEventArgs e) {
+      this.SelectFileAndInitPlayer();
     }
 
-    private void OnPauseClick (object sender, RoutedEventArgs e) {
+    private void OnToggleClick (object sender, RoutedEventArgs e) {
       var player = this.Player;
       if (player.IsInPlay) {
         player.Pause();

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.IO.Compression;
 using Com.Opensource.Svga;
 using Google.Protobuf;
@@ -6,7 +7,20 @@ using Google.Protobuf.Collections;
 
 namespace Svga.SvgaPlayer.Controls {
   public partial class SvgaPlayer {
+    /// <summary>
+    /// 当前已播放次数.
+    /// </summary>
+    private int PlayedCount { get; set; }
+
+    /// <summary>
+    /// SVGA 文件原始二进制.
+    /// </summary>
     private byte[] InflatedBytes { get; set; }
+
+    /// <summary>
+    /// MovieEntity 对象.
+    /// SVGA 的所有数据将从本对象中读取.
+    /// </summary>
     private MovieEntity MovieEntity { get; set; }
 
     /// <summary>
@@ -61,7 +75,7 @@ namespace Svga.SvgaPlayer.Controls {
     /// <summary>
     /// 载入 SVGA 文件数据.
     /// </summary>
-    /// <param name="svgaFileBuffer"></param>
+    /// <param name="svgaFileBuffer">SVGA 文件二进制 Stream.</param>
     public void LoadSvgaFileData (Stream svgaFileBuffer) {
       this.InflateSvgaFile(svgaFileBuffer);
       this.GetMovieEntity();
