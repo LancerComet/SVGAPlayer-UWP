@@ -119,6 +119,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="SvgaPlayer\Controls\SvgaPlayer.Draw.cs" />
     <Compile Include="SvgaPlayer\Controls\SvgaPlayer.xaml.cs">
       <DependentUpon>SvgaPlayer.xaml</DependentUpon>
@@ -137,7 +138,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="Assets\Svga\p1.svga" />
     <None Include="Svga_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

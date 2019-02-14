@@ -48,5 +48,10 @@ class SvgaPlayer {
   /// 暂停.
   /// </summary>
   public void Pause () {}
+  
+  /// <summary>
+  /// 卸载舞台所有数据.
+  /// </summary>
+  public void UnloadStage () {}
 }
 ```

@@ -13,7 +13,7 @@ namespace Svga.SvgaPlayer.Controls {
     private void DrawSingleSprite (CanvasDrawingSession session, SvgaSprite sprite) {
       var currentFrame = sprite.Frames[this.CurrentFrame];
       if (currentFrame != null) {
-        Matrix4x4 perspective = new Matrix4x4();  // Sprite 透视参数.
+        var perspective = new Matrix4x4();  // Sprite 透视参数.
         var transform = currentFrame.Transform;
         if (transform != null) {
           perspective = new Matrix4x4(new Matrix3x2(

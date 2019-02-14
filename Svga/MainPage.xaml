@@ -10,13 +10,18 @@
   Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
 >
   <Grid>
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
-      <Button Content="Select Svga File" Click="OnSelectFileClick"></Button>
-      <Button Content="Toggle Pause" Click="OnToggleClick"></Button>
-    </StackPanel>
-
     <Viewbox>
       <controls:SvgaPlayer x:Name="Player"></controls:SvgaPlayer>
     </Viewbox>
+
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
+      <Button Content="Select Svga File" Click="OnSelectFileClick"></Button>
+      <Button Content="Toggle Pause" Click="OnToggleClick"></Button>
+      <TextBlock
+        Margin="10 0 0 0" VerticalAlignment="Center"
+        Text="Playing finished." Foreground="LightSeaGreen"
+        Visibility="{x:Bind IsShowDoneText, Mode=OneWay}"
+      ></TextBlock>
+    </StackPanel>
   </Grid>
 </Page>

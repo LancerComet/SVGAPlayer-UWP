@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Windows.UI.Core;
 using Microsoft.Graphics.Canvas.UI;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 using Svga.SvgaPlayer.Models;
@@ -127,7 +128,17 @@ namespace Svga.SvgaPlayer.Controls {
       // 此条件需要写在结尾, 否则当前帧会被清空而显示空白.
       if (this.LoopCount > 0 && this.PlayedCount >= this.LoopCount) {
         this.Pause();
+        this.NotifyLoopFinish();
       }
+    }
+
+    /// <summary>
+    /// 通知 UI 线程播放完成.
+    /// </summary>
+    private async void NotifyLoopFinish () {
+      await this.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () => {
+        this.OnLoopFinish?.Invoke();
+      });
     }
 
     /// <summary>
@@ -170,6 +181,29 @@ namespace Svga.SvgaPlayer.Controls {
     /// </summary>
     public void Pause () {
       this.Stage.Paused = true;
+    }
+
+    /// <summary>
+    /// 卸载舞台所有数据.
+    /// </summary>
+    public void UnloadStage () {
+      this.Pause();
+      this.PlayedCount = 0;
+      this.IsStageInited = false;
+      this.IsResourceReady = false;
+      this.StageResource = null;
+      this.InflatedBytes = null;
+      this.MovieEntity = null;
+      this.UnloadStageEvents();
+    }
+
+    /// <summary>
+    /// 卸载舞台事件.
+    /// </summary>
+    private void UnloadStageEvents () {
+      this.Stage.CreateResources -= this.StageOnCreateResources;
+      this.Stage.Update -= this.StageOnUpdate;
+      this.Stage.Draw -= this.StageOnDraw;
     }
   }
 }
