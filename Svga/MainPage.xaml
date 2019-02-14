@@ -16,7 +16,12 @@
 
     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
       <Button Content="Select Svga File" Click="OnSelectFileClick"></Button>
-      <Button Content="Toggle Pause" Click="OnToggleClick"></Button>
+      <Button Click="OnPlayClick">
+        <SymbolIcon Symbol="Play"></SymbolIcon>
+      </Button>
+      <Button Click="OnPauseClick">
+        <SymbolIcon Symbol="Pause"></SymbolIcon>
+      </Button>
       <TextBlock
         Margin="10 0 0 0" VerticalAlignment="Center"
         Text="Playing finished." Foreground="LightSeaGreen"

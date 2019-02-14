@@ -193,6 +193,7 @@ namespace Svga.SvgaPlayer.Controls {
     public void UnloadStage () {
       this.Pause();
       this.PlayedCount = 0;
+      this.CurrentFrame = 0;
       this.IsStageInited = false;
       this.IsResourceReady = false;
       this.StageResource = null;

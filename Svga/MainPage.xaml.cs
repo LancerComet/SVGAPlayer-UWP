@@ -24,9 +24,10 @@ namespace Svga {
     }
 
     private async void SelectFileAndInitPlayer () {
-      var picker = new FileOpenPicker();
-      picker.ViewMode = PickerViewMode.List;
-      picker.SuggestedStartLocation = PickerLocationId.Desktop;
+      var picker = new FileOpenPicker {
+        ViewMode = PickerViewMode.List,
+        SuggestedStartLocation = PickerLocationId.Desktop
+      };
       picker.FileTypeFilter.Add(".svga");
 
       var file = await picker.PickSingleFileAsync();
@@ -35,7 +36,7 @@ namespace Svga {
         using (var stream = await file.OpenAsync(FileAccessMode.Read, StorageOpenOptions.AllowOnlyReaders)) {
           var player = this.Player;
           player.UnloadStage();
-          player.LoopCount = 1;
+//          player.LoopCount = 1;
           player.LoadSvgaFileData(stream.AsStream());
           player.InitStage();
           player.Play();
@@ -48,13 +49,12 @@ namespace Svga {
       this.SelectFileAndInitPlayer();
     }
 
-    private void OnToggleClick (object sender, RoutedEventArgs e) {
-      var player = this.Player;
-      if (player.IsInPlay) {
-        player.Pause();
-      } else {
-        player.Play();
-      }
+    private void OnPlayClick (object sender, RoutedEventArgs e) {
+      this.Player.Play();
+    }
+
+    private void OnPauseClick (object sender, RoutedEventArgs e) {
+      this.Player.Pause();
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
