@@ -2,6 +2,8 @@
 
 This is the UWP version for SVGA.
 
+![img](https://raw.githubusercontent.com/LancerComet/SVGAPlayer-UWP/master/Static/Screenshot.gif)
+
 ## Quickstart
 
 Please check both `MainPage.xaml` and `MainPage.xaml.cs` to see the demo.
