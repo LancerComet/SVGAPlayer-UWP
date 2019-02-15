@@ -60,4 +60,6 @@ class SvgaPlayer {
 
 ## SVGA File Struct
 
+More Information about SVGA File: [Link](https://github.com/yyued/SVGA-Format)
+
 ![img](https://raw.githubusercontent.com/LancerComet/SVGAPlayer-UWP/master/Svga/SVGA%20File%20Sturct.png)
