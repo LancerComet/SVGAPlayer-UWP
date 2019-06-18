@@ -45,20 +45,6 @@ namespace Svga.SvgaPlayer.Models {
     public int TotalFrames => this.Frames.Count;
 
     /// <summary>
-    /// 当前绘制帧下标.
-    /// </summary>
-    private int _currentFrame;
-    public int CurrentFrame {
-      get => this._currentFrame;
-      set {
-        if (value > this.TotalFrames - 1) {
-          value = 0;
-        }
-        this._currentFrame = value;
-      }
-    }
-
-    /// <summary>
     /// 初始化 CanvasBitmap.
     /// </summary>
     private async Task InitCanvasBitmap () {

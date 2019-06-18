@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -40,7 +41,9 @@ namespace Svga {
           player.LoadSvgaFileData(stream.AsStream());
           player.InitStage();
           player.Play();
-          player.OnLoopFinish += () => { this.IsShowDoneText = true; };
+          player.OnLoopFinish += () => {
+            this.IsShowDoneText = true;
+          };
         }
       }
     }

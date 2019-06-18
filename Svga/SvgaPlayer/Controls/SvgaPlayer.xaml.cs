@@ -16,6 +16,7 @@ namespace Svga.SvgaPlayer.Controls {
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void OnLoaded (object sender, RoutedEventArgs e) {
+      // ...
     }
 
     /// <summary>
@@ -24,15 +25,11 @@ namespace Svga.SvgaPlayer.Controls {
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void OnUnloaded (object sender, RoutedEventArgs e) {
-      this.UnloadStageEvents();
-      this.Loaded -= this.OnLoaded;
-      this.Unloaded -= this.OnUnloaded;
+      // ...
     }
 
     public SvgaPlayer () {
       this.InitializeComponent();
-      this.Loaded += this.OnLoaded;
-      this.Unloaded += this.OnUnloaded;
     }
   }
 }

@@ -8,6 +8,14 @@
   d:DesignHeight="300"
   d:DesignWidth="400"
   xmlns:win2d="using:Microsoft.Graphics.Canvas.UI.Xaml"
+  Loaded="OnLoaded"
+  Unloaded="OnUnloaded"
 >
-  <win2d:CanvasAnimatedControl x:Name="Canvas" Paused="True"></win2d:CanvasAnimatedControl>
+  <win2d:CanvasAnimatedControl
+    x:Name="Canvas"
+    Paused="True"
+    Update="StageOnUpdate"
+    Draw="StageOnDraw"
+    CreateResources="StageOnCreateResources"
+  ></win2d:CanvasAnimatedControl>
 </UserControl>

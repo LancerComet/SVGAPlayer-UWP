@@ -46,12 +46,12 @@ namespace Svga.SvgaPlayer.Controls {
     /// <summary>
     /// 动画总帧数.
     /// </summary>
-    private int TotalFrame => this.MovieParams.Frames;
+    private int TotalFrame => this.MovieParams?.Frames ?? 0;
 
     /// <summary>
     /// 当前播放帧.
     /// </summary>
-    private int CurrentFrame { get; set; }
+    public int CurrentFrame { get; set; }
 
     /// <summary>
     /// CanvasControl 对象.
@@ -63,12 +63,7 @@ namespace Svga.SvgaPlayer.Controls {
     /// </summary>
     private StageResource StageResource { get; set; }
 
-    /// <summary>
-    /// Stage OnCreateResource 事件.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="args"></param>
-    private async void StageOnCreateResources (CanvasAnimatedControl sender, CanvasCreateResourcesEventArgs args) {
+    private async void InitStageResource () {
       if (this.IsResourceReady) {
         return;
       }
@@ -92,6 +87,14 @@ namespace Svga.SvgaPlayer.Controls {
     }
 
     /// <summary>
+    /// Stage OnCreateResource 事件.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="args"></param>
+    private void StageOnCreateResources (CanvasAnimatedControl sender, CanvasCreateResourcesEventArgs args) {
+    }
+
+    /// <summary>
     /// Stage OnUpdate 事件.
     /// 用于更新舞台数据, 一般在运行一次 Update 后运行一次 Draw 事件.
     /// 但当程序运行缓慢时, 可能会运行多次 Update 后再执行一次 Draw 事件.
@@ -107,7 +110,7 @@ namespace Svga.SvgaPlayer.Controls {
     /// <param name="sender"></param>
     /// <param name="args"></param>
     private void StageOnDraw (ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args) {
-      if (!this.IsInPlay || !this.IsResourceReady) {
+      if (!this.IsInPlay || !this.IsResourceReady || !this.IsStageInited) {
         return;
       }
 
@@ -166,10 +169,7 @@ namespace Svga.SvgaPlayer.Controls {
       }
       stage.TargetElapsedTime = TimeSpan.FromMilliseconds(1000d / fps);
 
-      stage.CreateResources += this.StageOnCreateResources;
-      stage.Update += this.StageOnUpdate;
-      stage.Draw += this.StageOnDraw;
-
+      this.InitStageResource();
       this.IsStageInited = true;
     }
 
@@ -199,16 +199,6 @@ namespace Svga.SvgaPlayer.Controls {
       this.StageResource = null;
       this.InflatedBytes = null;
       this.MovieEntity = null;
-      this.UnloadStageEvents();
-    }
-
-    /// <summary>
-    /// 卸载舞台事件.
-    /// </summary>
-    private void UnloadStageEvents () {
-      this.Stage.CreateResources -= this.StageOnCreateResources;
-      this.Stage.Update -= this.StageOnUpdate;
-      this.Stage.Draw -= this.StageOnDraw;
     }
   }
 }
