@@ -48,16 +48,27 @@ namespace Svga.SvgaPlayer.Controls {
     /// 开始画布播放.
     /// </summary>
     public void Play () {
+      this.IsInPlay = true;
       this.Stage.Paused = false;
-      this.Notify(nameof(this.IsInPlay));
     }
 
     /// <summary>
     /// 暂停画布播放.
     /// </summary>
     public void Pause() {
-      this.Stage.Paused = true;
-      this.Notify(nameof(this.IsInPlay));
+      this.IsInPlay = false;
+    }
+
+    public void Seek (int frame) {
+      if (frame < 0) {
+        frame = 0;
+      }
+
+      if (frame > this.TotalFrame - 1) {
+        frame = this.TotalFrame - 1;
+      }
+
+      this._drawNextFrame = frame;
     }
 
     /// <summary>

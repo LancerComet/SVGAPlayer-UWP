@@ -59,10 +59,11 @@ namespace Svga.SvgaPlayer.Controls {
     /// <summary>
     /// 绘制单个 Sprite.
     /// </summary>
+    /// <param name="frame"></param>
     /// <param name="session"></param>
     /// <param name="sprite"></param>
-    private void DrawSingleSprite(CanvasDrawingSession session, SvgaSprite sprite) {
-      var currentFrame = sprite.Frames[this.CurrentFrame];
+    private void DrawSingleSprite (int frame, CanvasDrawingSession session, SvgaSprite sprite) {
+      var currentFrame = sprite.Frames[frame];
       if (currentFrame == null) {
         return;
       }
@@ -121,26 +122,35 @@ namespace Svga.SvgaPlayer.Controls {
     /// <param name="sender"></param>
     /// <param name="args"></param>
     private void StageOnDraw (ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args) {
-      if (!this.IsInPlay || !this._isResourceReady || !this._isStageInited) {
+      if (!this._isResourceReady || !this._isStageInited) {
         return;
       }
+
+      var drawFrame = this._drawNextFrame > -1
+        ? this._drawNextFrame
+        : this.CurrentFrame;
 
       var stageResource = this._stageResource;
       var sprites = stageResource.Sprites;
       using (var session = args.DrawingSession) {
         // 遍历 Sprites 进行绘制.
         foreach (var sprite in sprites) {
-          this.DrawSingleSprite(session, sprite);
+          this.DrawSingleSprite(drawFrame, session, sprite);
         }
       }
 
-      var nextFrame = this.CurrentFrame + 1;
-      var isLoopFinished = nextFrame > this.TotalFrame - 1;
-      if (isLoopFinished) {
-        nextFrame = 0;
-        this._playedCount++;
+      this.CurrentFrame = drawFrame;
+      this._drawNextFrame = -1;
+
+      if (this.IsInPlay) {
+        var nextFrame = drawFrame + 1;
+        var isLoopFinished = nextFrame > this.TotalFrame - 1;
+        if (isLoopFinished) {
+          nextFrame = 0;
+          this._playedCount++;
+        }
+        this.CurrentFrame = nextFrame;
       }
-      this.CurrentFrame = nextFrame;
 
       // 判断是否继续播放.
       // 此条件需要写在结尾, 否则当前帧会被清空而显示空白.

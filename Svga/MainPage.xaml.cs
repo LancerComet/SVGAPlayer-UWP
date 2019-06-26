@@ -6,6 +6,7 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Svga.Annotations;
 
 namespace Svga {
@@ -71,6 +72,12 @@ namespace Svga {
     [NotifyPropertyChangedInvocator]
     private void Notify ([CallerMemberName] string propertyName = null) {
       this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private void OnValueChanged (object sender, RangeBaseValueChangedEventArgs e) {
+      if (sender is Slider slider && slider.FocusState != FocusState.Unfocused) {
+        this.Player.Seek((int)e.NewValue);
+      }
     }
   }
 }

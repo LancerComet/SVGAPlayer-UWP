@@ -34,12 +34,7 @@
     </StackPanel>
 
     <Grid Grid.Row="1">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto"></ColumnDefinition>
-        <ColumnDefinition Width="*"></ColumnDefinition>
-      </Grid.ColumnDefinitions>
-
-      <ScrollViewer Grid.Column="0">
+      <ScrollViewer>
         <StackPanel Padding="10">
           <StackPanel Orientation="Horizontal">
             <TextBlock Text="尺寸："></TextBlock>
@@ -65,9 +60,16 @@
         </StackPanel>
       </ScrollViewer>
 
-      <Viewbox Grid.Column="1">
+      <Viewbox StretchDirection="DownOnly">
         <controls:SvgaPlayer x:Name="Player"></controls:SvgaPlayer>
       </Viewbox>
+
+      <Grid Padding="20" VerticalAlignment="Bottom">
+        <Slider
+          Minimum="0" Maximum="{x:Bind Player.TotalFrame, Mode=OneWay}" Value="{x:Bind Player.CurrentFrame, Mode=OneWay}"
+          ValueChanged="OnValueChanged"
+        ></Slider>
+      </Grid>
     </Grid>
   </Grid>
 </Page>

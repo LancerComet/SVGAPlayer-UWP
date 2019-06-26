@@ -38,6 +38,11 @@ namespace Svga.SvgaPlayer.Controls {
     private List<SpriteEntity> _sprites;
 
     /// <summary>
+    /// 绘制的下一帧
+    /// </summary>
+    private int _drawNextFrame = -1;
+
+    /// <summary>
     /// Sprite 数量.
     /// </summary>
     private int _spriteCount;
@@ -72,7 +77,14 @@ namespace Svga.SvgaPlayer.Controls {
     /// <summary>
     /// 是否处于播放状态.
     /// </summary>
-    public bool IsInPlay => this.Stage.Paused == false;
+    private bool _isInPlay;
+    public bool IsInPlay {
+      get => this._isInPlay;
+      set {
+        this._isInPlay = value;
+        this.Notify(nameof(this.IsInPlay));
+      }
+    }
 
     /// <summary>
     /// 动画总帧数.
