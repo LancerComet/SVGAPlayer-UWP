@@ -1,6 +1,8 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
+using Windows.UI.Core;
 using Com.Opensource.Svga;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
@@ -8,37 +10,119 @@ using Google.Protobuf.Collections;
 namespace Svga.SvgaPlayer.Controls {
   public partial class SvgaPlayer {
     /// <summary>
-    /// 当前已播放次数.
-    /// </summary>
-    private int PlayedCount { get; set; }
-
-    /// <summary>
     /// SVGA 文件原始二进制.
     /// </summary>
-    private byte[] InflatedBytes { get; set; }
+    private byte[] _inflatedBytes;
 
     /// <summary>
     /// MovieEntity 对象.
     /// SVGA 的所有数据将从本对象中读取.
     /// </summary>
-    private MovieEntity MovieEntity { get; set; }
+    private MovieEntity _movieEntity;
 
     /// <summary>
     /// 从 MovieEntity 中获取 SVGA 图片.
     /// MovieEntity 的 Images 属性下保存了 SVGA 的图片文件, 为一个可枚举的 byteString 集合,
     /// 键名为图片名称, 键值为 PNG 的二进制数据.
     /// </summary>
-    private MapField<string, ByteString> Images => this.MovieEntity?.Images;
+    private MapField<string, ByteString> _images;
 
     /// <summary>
     /// SVGA 配置参数.
     /// </summary>
-    private MovieParams MovieParams => this.MovieEntity?.Params;
+    private MovieParams _movieParams;
 
     /// <summary>
-    /// SVGA Sprite 对象.
+    /// SVGA Sprite Entity 列表.
     /// </summary>
-    private RepeatedField<SpriteEntity> Sprites => this.MovieEntity?.Sprites;
+    private List<SpriteEntity> _sprites;
+
+    /// <summary>
+    /// Sprite 数量.
+    /// </summary>
+    private int _spriteCount;
+    public int SpriteCount {
+      get => this._spriteCount;
+      set {
+        this._spriteCount = value;
+        this.Notify(nameof(this.SpriteCount));
+      }
+    }
+
+    /// <summary>
+    /// 播放循环次数, 默认为 0.
+    /// 当为 0 时代表无限循环播放.
+    /// </summary>
+    public int LoopCount { get; set; }
+
+    /// <summary>
+    /// 当前播放帧.
+    /// </summary>
+    private int _currentFrame;
+    public int CurrentFrame {
+      get => this._currentFrame;
+      private set {
+        this._currentFrame = value;
+        this.Dispatcher.RunAsync(CoreDispatcherPriority.Low, () => {
+          this.Notify(nameof(this.CurrentFrame));
+        });
+      }
+    }
+
+    /// <summary>
+    /// 是否处于播放状态.
+    /// </summary>
+    public bool IsInPlay => this.Stage.Paused == false;
+
+    /// <summary>
+    /// 动画总帧数.
+    /// </summary>
+    private int _totalFrame;
+    public int TotalFrame {
+      get => this._totalFrame;
+      set {
+        this._totalFrame = value;
+        this.Notify(nameof(this.TotalFrame));
+      }
+    }
+
+    /// <summary>
+    /// 目标播放帧率.
+    /// 若不设置或设置为 0 时使用默认帧率, 设置后将使用自定义帧率.
+    /// </summary>
+    private int _fps;
+    public int Fps {
+      get => this._fps;
+      set {
+        if (value < 0) { value = 0; }
+        this._fps = value;
+        this.Notify(nameof(this.Fps));
+      }
+    }
+
+    /// <summary>
+    /// 画布宽度.
+    /// </summary>
+    private float _stageWidth;
+    public float StageWidth {
+      get => this._stageWidth;
+      set {
+        this._stageWidth = value;
+        this.Notify(nameof(this.StageWidth));
+      }
+    }
+
+    /// <summary>
+    /// 画布高度.
+    /// </summary>
+    private float _stageHeight;
+    public float StageHeight {
+      get => this._stageHeight;
+      set {
+        this._stageHeight = value;
+        this.Notify(nameof(this.StageHeight));
+      }
+    }
 
     /// <summary>
     /// Inflate SVGA 文件, 获取其原始数据.
@@ -59,26 +143,27 @@ namespace Svga.SvgaPlayer.Controls {
         }
       }
 
-      this.InflatedBytes = inflatedBytes;
+      this._inflatedBytes = inflatedBytes;
     }
 
     /// <summary>
-    /// 通过 Infalte 数据获取 SVGA 的 MovieEntity.
+    /// 通过 Inflate 数据获取 SVGA 的 MovieEntity.
     /// </summary>
     /// <param name="inflatedBytes"></param>
-    private void GetMovieEntity () {
-      if (this.InflatedBytes != null) {
-        this.MovieEntity = MovieEntity.Parser.ParseFrom(this.InflatedBytes);
+    private void InitMovieEntity () {
+      if (this._inflatedBytes == null) {
+        return;
       }
-    }
 
-    /// <summary>
-    /// 载入 SVGA 文件数据.
-    /// </summary>
-    /// <param name="svgaFileBuffer">SVGA 文件二进制 Stream.</param>
-    public void LoadSvgaFileData (Stream svgaFileBuffer) {
-      this.InflateSvgaFile(svgaFileBuffer);
-      this.GetMovieEntity();
+      var moveEntity = MovieEntity.Parser.ParseFrom(this._inflatedBytes);
+      this._movieEntity = moveEntity;
+      this._movieParams = moveEntity.Params;
+      this._images = moveEntity.Images;
+      this._sprites = moveEntity.Sprites.ToList();
+      this.TotalFrame = moveEntity.Params.Frames;
+      this.SpriteCount = this._sprites.Count;
+      this.StageWidth = this._movieParams.ViewBoxWidth;
+      this.StageHeight = this._movieParams.ViewBoxHeight;
     }
   }
 }
