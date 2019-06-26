@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -7,10 +6,14 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Svga.Annotations;
 
 namespace Svga {
   public sealed partial class MainPage : Page, INotifyPropertyChanged {
+    private int SpriteCount => 0;
+    private int TotalFrame => this.Player?.TotalFrame ?? 0;
+
     public MainPage () {
       this.InitializeComponent();
     }
@@ -32,20 +35,24 @@ namespace Svga {
       picker.FileTypeFilter.Add(".svga");
 
       var file = await picker.PickSingleFileAsync();
-      if (file != null) {
-        this.IsShowDoneText = false;
-        using (var stream = await file.OpenAsync(FileAccessMode.Read, StorageOpenOptions.AllowOnlyReaders)) {
-          var player = this.Player;
-          player.UnloadStage();
-//          player.LoopCount = 1;
-          player.LoadSvgaFileData(stream.AsStream());
-          player.InitStage();
-          player.Play();
-          player.OnLoopFinish += () => {
-            this.IsShowDoneText = true;
-          };
-        }
+      if (file == null) {
+        return;
       }
+
+      this.IsShowDoneText = false;
+      using (var stream = await file.OpenAsync(FileAccessMode.Read, StorageOpenOptions.AllowOnlyReaders)) {
+        var player = this.Player;
+        player.UnloadStage();
+        player.LoadSvgaFileData(stream.AsStream());
+        player.InitStage();
+        player.Play();
+        player.OnLoopFinish += () => {
+          this.IsShowDoneText = true;
+        };
+      }
+
+      this.Notify(nameof(this.SpriteCount));
+      this.Notify(nameof(this.TotalFrame));
     }
 
     private void OnSelectFileClick (object sender, RoutedEventArgs e) {
@@ -65,6 +72,12 @@ namespace Svga {
     [NotifyPropertyChangedInvocator]
     private void Notify ([CallerMemberName] string propertyName = null) {
       this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private void OnValueChanged (object sender, RangeBaseValueChangedEventArgs e) {
+      if (sender is Slider slider && slider.FocusState != FocusState.Unfocused) {
+        this.Player.Seek((int)e.NewValue);
+      }
     }
   }
 }

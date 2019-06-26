@@ -10,11 +10,15 @@
   Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
 >
   <Grid>
-    <Viewbox>
-      <controls:SvgaPlayer x:Name="Player"></controls:SvgaPlayer>
-    </Viewbox>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"></RowDefinition>
+      <RowDefinition Height="*"></RowDefinition>
+    </Grid.RowDefinitions>
 
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
+    <StackPanel 
+      Grid.Row="0"
+      Orientation="Horizontal"
+    >
       <Button Content="Select Svga File" Click="OnSelectFileClick"></Button>
       <Button Click="OnPlayClick">
         <SymbolIcon Symbol="Play"></SymbolIcon>
@@ -28,5 +32,44 @@
         Visibility="{x:Bind IsShowDoneText, Mode=OneWay}"
       ></TextBlock>
     </StackPanel>
+
+    <Grid Grid.Row="1">
+      <ScrollViewer>
+        <StackPanel Padding="10">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="尺寸："></TextBlock>
+            <TextBlock Text="{x:Bind Player.StageWidth, Mode=OneWay}">--</TextBlock>
+            <TextBlock Text="x"></TextBlock>
+            <TextBlock Text="{x:Bind Player.StageHeight, Mode=OneWay}">--</TextBlock>
+          </StackPanel>
+
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Sprite 数量："></TextBlock>
+            <TextBlock Text="{x:Bind Player.SpriteCount, Mode=OneWay}">--</TextBlock>
+          </StackPanel>
+
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="总帧数："></TextBlock>
+            <TextBlock Text="{x:Bind TotalFrame, Mode=OneWay}">--</TextBlock>
+          </StackPanel>
+
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="当前帧："></TextBlock>
+            <TextBlock Text="{x:Bind Player.CurrentFrame, Mode=OneWay}">--</TextBlock>
+          </StackPanel>
+        </StackPanel>
+      </ScrollViewer>
+
+      <Viewbox StretchDirection="DownOnly">
+        <controls:SvgaPlayer x:Name="Player"></controls:SvgaPlayer>
+      </Viewbox>
+
+      <Grid Padding="20" VerticalAlignment="Bottom">
+        <Slider
+          Minimum="0" Maximum="{x:Bind Player.TotalFrame, Mode=OneWay}" Value="{x:Bind Player.CurrentFrame, Mode=OneWay}"
+          ValueChanged="OnValueChanged"
+        ></Slider>
+      </Grid>
+    </Grid>
   </Grid>
 </Page>
