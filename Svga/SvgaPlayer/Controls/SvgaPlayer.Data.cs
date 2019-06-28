@@ -92,7 +92,7 @@ namespace Svga.SvgaPlayer.Controls {
     private int _totalFrame;
     public int TotalFrame {
       get => this._totalFrame;
-      set {
+      private set {
         this._totalFrame = value;
         this.Notify(nameof(this.TotalFrame));
       }

@@ -16,6 +16,12 @@ namespace Svga.SvgaPlayer.Controls {
     public event OnLoopFinishHandler OnLoopFinish;
 
     /// <summary>
+    /// 循环触发事件.
+    /// </summary>
+    public delegate void OnLoopHandler ();
+    public event OnLoopHandler OnLoop;
+
+    /// <summary>
     /// 载入 SVGA 文件数据.
     /// </summary>
     /// <param name="svgaFileBuffer">SVGA 文件二进制 Stream.</param>

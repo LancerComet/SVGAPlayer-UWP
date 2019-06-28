@@ -19,11 +19,11 @@
       Grid.Row="0"
       Orientation="Horizontal"
     >
-      <Button Content="Select Svga File" Click="OnSelectFileClick"></Button>
-      <Button Click="OnPlayClick">
+      <Button Content="Select Svga File" Click="OnSelectFileClick" Style="{StaticResource ButtonRevealStyle}"></Button>
+      <Button Click="OnPlayClick" Style="{StaticResource ButtonRevealStyle}">
         <SymbolIcon Symbol="Play"></SymbolIcon>
       </Button>
-      <Button Click="OnPauseClick">
+      <Button Click="OnPauseClick" Style="{StaticResource ButtonRevealStyle}">
         <SymbolIcon Symbol="Pause"></SymbolIcon>
       </Button>
       <TextBlock
@@ -54,19 +54,21 @@
           </StackPanel>
 
           <StackPanel Orientation="Horizontal">
-            <TextBlock Text="当前帧："></TextBlock>
+            <TextBlock Text="当前帧 (从 0 开始)："></TextBlock>
             <TextBlock Text="{x:Bind Player.CurrentFrame, Mode=OneWay}">--</TextBlock>
           </StackPanel>
         </StackPanel>
       </ScrollViewer>
 
       <Viewbox StretchDirection="DownOnly">
-        <controls:SvgaPlayer x:Name="Player"></controls:SvgaPlayer>
+        <controls:SvgaPlayer x:Name="Player" OnLoop="StageOnLoop"></controls:SvgaPlayer>
       </Viewbox>
 
       <Grid Padding="20" VerticalAlignment="Bottom">
         <Slider
-          Minimum="0" Maximum="{x:Bind Player.TotalFrame, Mode=OneWay}" Value="{x:Bind Player.CurrentFrame, Mode=OneWay}"
+          Minimum="0"
+          Maximum="{x:Bind TotalFrameForSlider, Mode=OneWay}"
+          Value="{x:Bind Player.CurrentFrame, Mode=OneWay}"
           ValueChanged="OnValueChanged"
         ></Slider>
       </Grid>

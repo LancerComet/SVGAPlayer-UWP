@@ -158,6 +158,8 @@ namespace Svga.SvgaPlayer.Controls {
         this.Pause();
         this.NotifyLoopFinish();
       }
+
+      this.OnLoop?.Invoke();
     }
 
     /// <summary>

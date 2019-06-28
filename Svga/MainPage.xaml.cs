@@ -13,6 +13,7 @@ namespace Svga {
   public sealed partial class MainPage : Page, INotifyPropertyChanged {
     private int SpriteCount => 0;
     private int TotalFrame => this.Player?.TotalFrame ?? 0;
+    private int TotalFrameForSlider => this.TotalFrame == 0 ? 0 : this.TotalFrame - 1;
 
     public MainPage () {
       this.InitializeComponent();
@@ -46,13 +47,14 @@ namespace Svga {
         player.LoadSvgaFileData(stream.AsStream());
         player.InitStage();
         player.Play();
-        player.OnLoopFinish += () => {
-          this.IsShowDoneText = true;
-        };
       }
 
       this.Notify(nameof(this.SpriteCount));
       this.Notify(nameof(this.TotalFrame));
+      this.Notify(nameof(this.TotalFrameForSlider));
+    }
+
+    private void StageOnLoop () {
     }
 
     private void OnSelectFileClick (object sender, RoutedEventArgs e) {
